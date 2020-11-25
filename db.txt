@@ -1,0 +1,59 @@
+/******************create user table************************/
+use userdb;
+CREATE TABLE `userdb`.`user`(
+`ID` int(11) NOT NULL AUTO_INCREMENT,
+`FIRSTNAME` varchar(20) DEFAULT NULL,
+`LASTNAME` varchar(20) DEFAULT NULL,
+`ADDRESS` VARCHAR(40) DEFAULT NULL,
+`ORGNAME` VARCHAR(20) DEFAULT NULL,
+`SALARY` INT(11) DEFAULT NULL,
+PRIMARY KEY(`ID`)
+)ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci; 
+
+/*******************insert records in user**********************/
+
+Use userdb;
+LOCK TABLES `user` WRITE;
+INSERT INTO user VALUES (1,'Vaishnavi','Avhad','kop','Bluepineapple',30000),(2,'Snehal','Lokhande','kop','Bluepineapple',30000);
+UNLOCK TABLES;
+
+
+/**************USERADDOREDIT METHOD***************************/
+
+CREATE DEFINER = `root`@`localhost` PROCEDURE `UserAddOrEdit` (
+In _ID INT,
+In _FIRSTNAME varchar(20),
+In _LASTNAME varchar(20),
+In _ADDRESS varchar(40),
+In _ORGNAME varchar(20),
+In _SALARY int
+)
+BEGIN
+	IF _ID=0 THEN
+		INSERT INTO user(FIRSTNAME,LASTNAME,ADDRESS,ORGNAME,SALARY)
+        	VALUES (_FIRSTNAME,_LASTNAME,_ADDRESS,_ORGNAME,_SALARY);
+        
+        	SET _ID= LAST_INSERT_ID();
+	else
+		UPDATE user
+        	SET
+        	FIRSTNAME = _FIRSTNAME,
+        	LASTNAME = _LASTNAME,
+		ADDRESS = _ADDRESS,
+        	ORGNAME = _ORGNAME,
+        	SALARY = _SALARY
+        	WHERE ID = _ID;
+	end if;
+    
+    SELECT _ID AS 'ID';
+END
+
+/*****************POSTMAN INSERT******************/
+{
+    "ID":0,
+    "FIRSTNAME":"VAISHNAVI",
+    "LASTNAME": "AVHAD",
+    "ADDRESS": "KOP",
+    "ORGNAME":"BLUEPINEAPPLE",
+    "SALARY": 30000
+}
